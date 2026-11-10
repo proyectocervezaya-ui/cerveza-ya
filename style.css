@@ -1,10 +1,160 @@
-body {
-    background-color: #f4f4f4;
-    font-family: Arial, sans-serif;
-    text-align: center;
-    padding-top: 50px;
+*  {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
-h1 {
-    color: #f5c174; /* Color estilo cerveza */
+html, body {
+    height: 100%;
+    width: 100%;
 }
+
+body {
+    display: flex;
+    flex-direction: column;
+    font-family: 'segoe ui', Tahoma, geneva, verdana, sans-serif;
+    background-color: #f3f4f6;
+}
+
+/* Cabecera */
+header { 
+    background-color: #f3f4f6;
+    color: white;
+    padding: 1.5rem 2rem;
+    box-shadow: 0 4px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* contenedor Flex Intermedio */
+.layout-container {
+    display: flex;
+    flex: 1;
+    width: 100%
+} 
+
+/* Contenido Principal */
+main {
+    flex: 1;
+    background-color: #f3f4f6;
+    padding: 2.5rem;
+    overflow-y: auto;
+}
+
+.animar-entrada {
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+
+    }
+    to {
+        opacity: 1;
+        transform: translatey(0);
+    }
+}
+
+/* Barra Lateral Estrechada y Menú Vertical */
+aside {
+    width: 240px; /* Mas estrecho que antes */
+    background-color: #f3f4f6;
+    padding: 1.5rem 1rem;
+    border-left: 1px solid #f3f4f6;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+ 
+aside h3 {
+font-size: 1.1rem;
+color: #1e293b;
+border-bottom: 2px solid #cbd5e1;
+padding-bottom: 0.5rem;
+
+
+}
+
+.menu.nav {
+
+    display: flex;
+    flex-direction: column; /* botones apilados verticalmente */
+gap: 10px;
+
+}
+
+/* botones interactives con colores y movimiento */
+.btn.nav {
+
+border: none;
+padding: 12px 16px;
+font-size: 0.95rem;
+font-weight: 600;
+color: #ffffff;
+border-radius: 8px;
+cursor: pointer;
+text-align: left;
+transition: all 0,3s cubic-bezier(0.4,0,0.2, 1);
+box-shadow:0 2px 4px rgba(0, 0, 0, 0.1);
+outline:none;
+}
+
+/* diferentes colores*/
+
+.btn-citas { background-color: #2563eb;}
+.btn-clientes { background-color: #0d9488}
+.btn-productos { background-color: #e11d48}
+.btn-cerveza { background-color: #f3f4f6;}
+.btn-punto de bodega {background-color: brown;}
+
+
+
+
+.btn-nav:hover { 
+
+    transform: translateX (5px) scale (1.02);
+    box-shadow: 0 4px 8px rgba (0, 0, 0, 0.2);
+    filter: brightness(1.1);
+
+}
+
+.btn-nav.active {
+
+transform: translateX(2px) scale(0.98);
+
+}
+
+footer {
+
+background-color: #0d9488;
+color:antiquewhite;
+text-align: center;
+padding: 1rem;
+}
+
+/*responsive*/
+@media (maz-width: 768px) {
+    .layout-container{
+        flex-direction: column;
+    }
+    aside {
+        width: 100%;
+        border-left: none;
+        border-top: 1px solid #f3f4f6;
+        
+    };
+    .menu.nav{
+        flex-direction:row;
+        flex-wrap:wrap;
+    }
+    .btn-nav{
+     flex:1;
+     text-align:center;
+     min-width:120px;
+
+    }
+}
+
+
+
+

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cerveza ya – Acceso</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<!-- LOGIN / REGISTRO -->
+<div class="card" id="cardMain">
+  <header>
+    <h1>🍺 Cerveza ya</h1>
+    <p id="subtitle">Inicia sesión para continuar</p>
+  </header>
+  <div class="body">
+
+    <!-- Vista login -->
+    <div class="view active" id="vLogin">
+      <form id="formLogin" autocomplete="off">
+        <label for="lCedula">Cédula</label>
+        <input type="text" id="lCedula" inputmode="numeric" placeholder="Ej: 1020304050" required>
+        <label for="lPass">Contraseña</label>
+        <input type="password" id="lPass" required>
+        <button class="btn" type="submit">Ingresar</button>
+      </form>
+      <div class="msg" id="msgLogin"></div>
+      <div class="switch">¿No tienes cuenta? <button class="link" data-go="vRegistro">Solicitar registro</button></div>
+    </div>
+
+    <!-- Vista registro -->
+    <div class="view" id="vRegistro">
+      <form id="formReg" autocomplete="off">
+        <label for="rNombre">Nombre completo</label>
+        <input type="text" id="rNombre" required>
+        <label for="rCedula">Cédula</label>
+        <input type="text" id="rCedula" inputmode="numeric" placeholder="Solo números" required>
+        <label for="rTel">Teléfono</label>
+        <input type="tel" id="rTel" placeholder="Ej: 3001234567" required>
+
+        <label>Tipo de cuenta que solicitas</label>
+        <div class="roles">
+          <label class="role"><input type="radio" name="rol" value="cliente" checked><span>🛒 Cliente<small>Hace pedidos</small></span></label>
+          <label class="role"><input type="radio" name="rol" value="vendedor"><span>🏪 Vendedor<small>Gestiona ventas</small></span></label>
+          <label class="role"><input type="radio" name="rol" value="repartidor"><span>🛵 Repartidor<small>Entrega pedidos</small></span></label>
+        </div>
+
+        <label for="rPass">Contraseña</label>
+        <input type="password" id="rPass" required>
+        <div class="hint">Mínimo 6 caracteres.</div>
+        <label for="rPass2">Confirmar contraseña</label>
+        <input type="password" id="rPass2" required>
+
+        <button class="btn" type="submit">Enviar solicitud</button>
+      </form>
+      <div class="msg" id="msgReg"></div>
+      <div class="switch">¿Ya tienes cuenta? <button class="link" data-go="vLogin">Iniciar sesión</button></div>
+    </div>
+
+    <!-- Bienvenida (usuario aprobado) -->
+    <div class="view" id="vWelcome">
+      <div class="welcome">
+        <h2 id="wNombre"></h2>
+        <span class="role-tag" id="wRol"></span>
+        <p>Tu cuenta está activa. Aquí irá el panel de tu rol.</p>
+        <button class="btn" id="btnSalir1">Cerrar sesión</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL ADMIN -->
+<div class="card wide" id="cardAdmin" style="display:none">
+  <header>
+    <h1>🍺 Panel de administración</h1>
+    <p>Aprueba o rechaza las solicitudes de cuenta</p>
+  </header>
+  <div class="body">
+    <div class="top">
+      <div class="tabs" id="tabs">
+        <button data-f="pendiente" class="on">Pendientes</button>
+        <button data-f="aprobada">Aprobadas</button>
+        <button data-f="rechazada">Rechazadas</button>
+        <button data-f="todas">Todas</button>
+      </div>
+      <button class="btn" style="width:auto;margin:0;padding:8px 16px" id="btnSalir2">Cerrar sesión</button>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Nombre</th><th>Cédula</th><th>Teléfono</th><th>Rol</th><th>Estado</th><th>Acciones</th></tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+    <div class="msg" id="msgAdmin"></div>
+  </div>
+</div>
+
+<script src="js/script.js"></script>
+</body>
+</html>

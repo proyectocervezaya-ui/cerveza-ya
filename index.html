@@ -1,101 +1,466 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Cerveza ya – Acceso</title>
-<link rel="stylesheet" href="css/styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cerveza ya</title>
+  <link rel="stylesheet" href="css/styles.css">
 </head>
+
 <body>
 
-<!-- LOGIN / REGISTRO -->
-<div class="card" id="cardMain">
-  <header>
-    <h1>🍺 Cerveza ya</h1>
-    <p id="subtitle">Inicia sesión para continuar</p>
-  </header>
-  <div class="body">
+  <!-- LOGIN Y REGISTRO -->
+  <div class="card" id="cardMain">
 
-    <!-- Vista login -->
-    <div class="view active" id="vLogin">
-      <form id="formLogin" autocomplete="off">
-        <label for="lCedula">Cédula</label>
-        <input type="text" id="lCedula" inputmode="numeric" placeholder="Ej: 1020304050" required>
-        <label for="lPass">Contraseña</label>
-        <input type="password" id="lPass" required>
-        <button class="btn" type="submit">Ingresar</button>
-      </form>
-      <div class="msg" id="msgLogin"></div>
-      <div class="switch">¿No tienes cuenta? <button class="link" data-go="vRegistro">Solicitar registro</button></div>
-    </div>
+    <header>
+      <h1>🍺 Cerveza ya</h1>
+      <p id="subtitle">Inicia sesión para continuar</p>
+    </header>
 
-    <!-- Vista registro -->
-    <div class="view" id="vRegistro">
-      <form id="formReg" autocomplete="off">
-        <label for="rNombre">Nombre completo</label>
-        <input type="text" id="rNombre" required>
-        <label for="rCedula">Cédula</label>
-        <input type="text" id="rCedula" inputmode="numeric" placeholder="Solo números" required>
-        <label for="rTel">Teléfono</label>
-        <input type="tel" id="rTel" placeholder="Ej: 3001234567" required>
+    <div class="body">
 
-        <label>Tipo de cuenta que solicitas</label>
-        <div class="roles">
-          <label class="role"><input type="radio" name="rol" value="cliente" checked><span>🛒 Cliente<small>Hace pedidos</small></span></label>
-          <label class="role"><input type="radio" name="rol" value="vendedor"><span>🏪 Vendedor<small>Gestiona ventas</small></span></label>
-          <label class="role"><input type="radio" name="rol" value="repartidor"><span>🛵 Repartidor<small>Entrega pedidos</small></span></label>
+      <!-- INICIO DE SESIÓN -->
+      <div class="view active" id="vLogin">
+
+        <form id="formLogin" autocomplete="off">
+
+          <label for="lCedula">Cédula</label>
+          <input type="text" id="lCedula"
+            inputmode="numeric"
+            placeholder="Ej: 1020304050" required>
+
+          <label for="lPass">Contraseña</label>
+          <input type="password" id="lPass" required>
+
+          <button class="btn" type="submit">Ingresar</button>
+
+        </form>
+
+        <div class="msg" id="msgLogin"></div>
+
+        <div class="switch">
+          ¿No tienes cuenta?
+          <button class="link" type="button" data-go="vRegistro">
+            Solicitar registro
+          </button>
         </div>
 
-        <label for="rPass">Contraseña</label>
-        <input type="password" id="rPass" required>
-        <div class="hint">Mínimo 6 caracteres.</div>
-        <label for="rPass2">Confirmar contraseña</label>
-        <input type="password" id="rPass2" required>
-
-        <button class="btn" type="submit">Enviar solicitud</button>
-      </form>
-      <div class="msg" id="msgReg"></div>
-      <div class="switch">¿Ya tienes cuenta? <button class="link" data-go="vLogin">Iniciar sesión</button></div>
-    </div>
-
-    <!-- Bienvenida (usuario aprobado) -->
-    <div class="view" id="vWelcome">
-      <div class="welcome">
-        <h2 id="wNombre"></h2>
-        <span class="role-tag" id="wRol"></span>
-        <p>Tu cuenta está activa. Aquí irá el panel de tu rol.</p>
-        <button class="btn" id="btnSalir1">Cerrar sesión</button>
       </div>
-    </div>
-  </div>
+
+      <!-- REGISTRO -->
+      <div class="view" id="vRegistro">
+
+        <form id="formReg" autocomplete="off">
+
+          <label for="rNombre">Nombre completo</label>
+          <input type="text" id="rNombre" required>
+
+          <label for="rCedula">Cédula</label>
+          <input type="text" id="rCedula"
+            inputmode="numeric"
+            placeholder="Solo números" required>
+
+          <label for="rTel">Teléfono</label>
+          <input type="tel" id="rTel"
+            placeholder="Ej: 3001234567" required>
+
+          <label>Tipo de cuenta que solicitas</label>
+
+
+<div class="roles">
+
+  <label class="role">
+    <input type="radio" name="rol" value="cliente" checked>
+    <span>🛒 Cliente<small>Realiza pedidos</small></span>
+  </label>
+
+  <label class="role">
+    <input type="radio" name="rol" value="repartidor">
+    <span>🛵 Repartidor<small>Entrega pedidos</small></span>
+  </label>
+
 </div>
 
-<!-- PANEL ADMIN -->
-<div class="card wide" id="cardAdmin" style="display:none">
+          <label for="rPass">Contraseña</label>
+          <input type="password" id="rPass" required>
+
+          <div class="hint">Mínimo 6 caracteres.</div>
+
+          <label for="rPass2">Confirmar contraseña</label>
+          <input type="password" id="rPass2" required>
+
+          <button class="btn" type="submit">
+            Enviar solicitud
+          </button>
+
+        </form>
+
+        <div class="msg" id="msgReg"></div>
+
+        <div class="switch">
+          ¿Ya tienes cuenta?
+          <button class="link" type="button" data-go="vLogin">
+            Iniciar sesión
+          </button>
+        </div>
+
+      </div>
+
+      <!-- BIENVENIDA -->
+      <div class="view" id="vWelcome">
+
+        <div class="welcome">
+
+          <h2 id="wNombre"></h2>
+
+          <span class="role-tag" id="wRol"></span>
+
+          <p>Tu cuenta está activa. Aquí irá el panel de tu rol.</p>
+
+          <button class="btn" id="btnSalir1" type="button">
+            Cerrar sesión
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PANEL ADMINISTRADOR -->
+  <div class="card wide" id="cardAdmin" style="display:none">
+
+    <header>
+      <h1>🍺 Panel de administración</h1>
+      <p>Aprueba o rechaza las solicitudes de cuenta</p>
+    </header>
+
+    <div class="body">
+
+      <div class="top">
+
+        <div class="tabs" id="tabs">
+          <button type="button" data-f="pendiente" class="on">
+            Pendientes
+          </button>
+
+          <button type="button" data-f="aprobada">
+            Aprobadas
+          </button>
+
+          <button type="button" data-f="rechazada">
+            Rechazadas
+          </button>
+
+          <button type="button" data-f="todas">
+            Todas
+          </button>
+        </div>
+
+        <button class="btn"
+          style="width:auto;margin:0;padding:8px 16px"
+          id="btnSalir2" type="button">
+          Cerrar sesión
+        </button>
+
+      </div>
+
+      <div class="tablewrap">
+
+        <table>
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Cédula</th>
+              <th>Teléfono</th>
+              <th>Rol</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+
+          <tbody id="tbody"></tbody>
+        </table>
+
+      </div>
+
+      <div class="msg" id="msgAdmin"></div>
+
+      <section class="admin-modulo">
+        <h2>📊 Inventario de cervezas</h2>
+        <p>Existencias disponibles en el negocio (canastas).</p>
+        <div id="adminInventario" class="admin-grid"></div>
+      </section>
+
+      <section class="admin-modulo">
+        <h2>📥 Solicitar abastecimiento</h2>
+        <form id="formAbastecimiento" class="form-inline">
+          <div><label for="abProducto">Cerveza</label><select id="abProducto" required></select></div>
+          <div><label for="abCantidad">Cantidad de canastas</label><input id="abCantidad" type="number" min="1" value="1" required></div>
+          <div><label for="abProveedor">Proveedor</label><input id="abProveedor" type="text" placeholder="Nombre del proveedor" required></div>
+          <button class="btn" type="submit">Registrar pedido de inventario</button>
+        </form>
+        <div id="listaAbastecimiento"></div>
+      </section>
+
+      <section class="admin-modulo">
+        <h2>🧾 Pedidos de clientes</h2>
+        <p>Seguimiento de pedidos pendientes, en camino y entregados.</p>
+        <div id="adminPedidos"></div>
+      </section>
+
+      <section class="admin-modulo">
+        <h2>💬 Contactar repartidores</h2>
+        <div class="chat-layout">
+          <div id="listaChatsAdmin" class="chat-contactos"></div>
+          <div class="chat-panel">
+            <strong id="chatAdminTitulo">Selecciona un repartidor</strong>
+            <div id="chatAdminMensajes" class="chat-mensajes"></div>
+            <form id="formChatAdmin" class="chat-form">
+              <input id="textoChatAdmin" type="text" placeholder="Escribe un mensaje..." autocomplete="off" required>
+              <button class="btn" type="submit">Enviar</button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+<!-- PANEL VENDEDOR -->
+<div class="card wide" id="cardVendedor" style="display:none">
+
   <header>
-    <h1>🍺 Panel de administración</h1>
-    <p>Aprueba o rechaza las solicitudes de cuenta</p>
+    <h1>🏪 Panel del vendedor</h1>
+    <p>Gestiona los pedidos y controla el inventario</p>
   </header>
+
   <div class="body">
-    <div class="top">
-      <div class="tabs" id="tabs">
-        <button data-f="pendiente" class="on">Pendientes</button>
-        <button data-f="aprobada">Aprobadas</button>
-        <button data-f="rechazada">Rechazadas</button>
-        <button data-f="todas">Todas</button>
+
+    <div class="cliente-top">
+      <div>
+        <h2 id="vendedorSaludo">¡Hola, vendedor!</h2>
+        <p>Administra los pedidos y las existencias de cerveza.</p>
       </div>
-      <button class="btn" style="width:auto;margin:0;padding:8px 16px" id="btnSalir2">Cerrar sesión</button>
+
+      <button class="btn btn-salir" id="btnSalirVendedor" type="button">
+        Cerrar sesión
+      </button>
     </div>
-    <div class="tablewrap">
-      <table>
-        <thead><tr><th>Nombre</th><th>Cédula</th><th>Teléfono</th><th>Rol</th><th>Estado</th><th>Acciones</th></tr></thead>
-        <tbody id="tbody"></tbody>
-      </table>
-    </div>
-    <div class="msg" id="msgAdmin"></div>
+
+    <!-- PEDIDOS -->
+    <section class="historial">
+      <h2>📦 Pedidos por gestionar</h2>
+      <p>Revisa los pedidos de los clientes y actualiza su estado.</p>
+
+      <div id="tablaPedidosVendedor"></div>
+    </section>
+
+    <!-- INVENTARIO -->
+    <section class="historial">
+      <h2>📊 Inventario de cervezas</h2>
+      <p>Consulta las existencias disponibles en el negocio.</p>
+
+      <div id="stockProductos"></div>
+    </section>
+
+    <div class="msg" id="msgVendedor"></div>
+
   </div>
 </div>
 
-<script src="js/script.js"></script>
+
+<!-- PANEL REPARTIDOR -->
+<div class="card wide" id="cardRepartidor" style="display:none;">
+
+  <header>
+    <h1>🛵 Panel de repartidor</h1>
+    <p>Gestiona los pedidos y registra las entregas</p>
+  </header>
+
+  <div class="body">
+    <div class="repartidor-top">
+      <div>
+        <h2 id="repartidorSaludo">Bienvenido</h2>
+        <p>Consulta tus pedidos pendientes y entregas realizadas.</p>
+      </div>
+      <button class="btn btn-salir" id="btnSalirRepartidor" type="button">
+        Cerrar sesión
+      </button>
+    </div>
+
+    <div class="repartidor-resumen">
+      <div class="resumen-card">
+        <span>📦</span>
+        <h3 id="contadorPendientes">0</h3>
+        <p>Pendientes</p>
+      </div>
+      <div class="resumen-card">
+        <span>🛵</span>
+        <h3 id="contadorCamino">0</h3>
+        <p>En camino</p>
+      </div>
+      <div class="resumen-card">
+        <span>✅</span>
+        <h3 id="contadorEntregados">0</h3>
+        <p>Entregados</p>
+      </div>
+    </div>
+
+    <section class="repartidor-seccion">
+      <h2>📦 Pedidos pendientes</h2>
+      <p>Aquí aparecen los pedidos que esperan ser aceptados por un repartidor.</p>
+      <div id="pedidosRepartidor"></div>
+    </section>
+
+    <section class="repartidor-seccion">
+      <h2>🛵 Pedidos en camino</h2>
+      <p>Pedidos que aceptaste y que todavía debes entregar.</p>
+      <div id="pedidosEnCamino"></div>
+    </section>
+
+    <section class="repartidor-seccion">
+      <h2>✅ Entregas realizadas</h2>
+      <p>Historial de pedidos cuya entrega ya fue confirmada.</p>
+      <div id="entregasRealizadas"></div>
+    </section>
+
+    <section class="repartidor-seccion">
+      <h2>💬 Chat con clientes y administrador</h2>
+      <div class="chat-layout">
+        <div id="listaChatsRepartidor" class="chat-contactos"></div>
+        <div class="chat-panel">
+          <strong id="chatRepartidorTitulo">Selecciona un pedido</strong>
+          <div id="chatRepartidorMensajes" class="chat-mensajes"></div>
+          <form id="formChatRepartidor" class="chat-form">
+            <input id="textoChatRepartidor" type="text" placeholder="Escribe un mensaje..." autocomplete="off" required>
+            <button class="btn" type="submit">Enviar</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <p id="msgRepartidor" class="msg"></p>
+  </div>
+</div>
+
+  <!-- PANEL CLIENTE -->
+  <div class="card wide" id="cardCliente" style="display:none">
+
+    <header>
+      <h1>🍺 Cerveza ya</h1>
+      <p>Tu tienda de cervezas, a un solo clic</p>
+    </header>
+
+    <div class="body">
+
+      <!-- ENCABEZADO DEL CLIENTE -->
+      <div class="cliente-top">
+
+        <div>
+          <h2 id="clienteSaludo">¡Hola!</h2>
+          <p>Explora nuestro catálogo y arma tu pedido.</p>
+        </div>
+
+        <button class="btn btn-salir"
+          id="btnSalirCliente" type="button">
+          Cerrar sesión
+        </button>
+
+      </div>
+
+
+      <div class="cliente-layout">
+
+        <!-- CATÁLOGO -->
+        <section class="catalogo">
+
+          <div class="seccion-titulo">
+            <h2>🍻 Nuestro catálogo</h2>
+            <span>Productos disponibles</span>
+          </div>
+
+          <div id="catalogoProductos" class="productos-grid"></div>
+
+        </section>
+
+
+        <!-- CARRITO -->
+        <aside class="carrito">
+
+          <h2>🛒 Mi carrito</h2>
+
+          <div id="carritoProductos">
+            <p class="carrito-vacio">
+              Tu carrito está vacío.
+            </p>
+          </div>
+
+          <div class="carrito-resumen">
+
+            <div>
+              <span>Subtotal</span>
+              <strong id="carritoSubtotal">$0</strong>
+            </div>
+
+            <div>
+              <span>Domicilio</span>
+              <strong id="carritoDomicilio">$0</strong>
+            </div>
+
+            <div class="total">
+              <span>Total</span>
+              <strong id="carritoTotal">$0</strong>
+            </div>
+
+            <button class="btn"
+              id="btnConfirmarPedido" type="button">
+              Confirmar pedido
+            </button>
+
+            <p class="carrito-ayuda" id="mensajeCarrito">
+              Los pedidos son demostrativos.
+            </p>
+
+          </div>
+
+        </aside>
+
+      </div>
+
+      <section class="historial">
+
+        <h2>📦 Mis pedidos</h2>
+
+        <div id="listaPedidos">
+          <p class="carrito-vacio">
+            Todavía no tienes pedidos.
+          </p>
+        </div>
+
+      </section>
+
+      <section class="historial" id="seccionChatCliente">
+        <h2>💬 Contactar a mi repartidor</h2>
+        <p>Cuando un repartidor acepte tu pedido, podrás escribirle aquí.</p>
+        <div id="chatClientePedido" class="chat-layout">
+          <div id="listaPedidosChat" class="chat-contactos"></div>
+          <div class="chat-panel">
+            <strong id="chatClienteTitulo">Selecciona un pedido en curso</strong>
+            <div id="chatClienteMensajes" class="chat-mensajes"></div>
+            <form id="formChatCliente" class="chat-form">
+              <input id="textoChatCliente" type="text" placeholder="Escribe un mensaje..." autocomplete="off" required>
+              <button class="btn" type="submit">Enviar</button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <script src="js/script.js"></script>
+
 </body>
 </html>

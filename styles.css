@@ -510,3 +510,53 @@ th{background:#f6e7bb;font-size:.8rem;text-transform:uppercase;letter-spacing:.0
 .admin-pedido-cabecera{display:flex;justify-content:space-between;gap:10px;margin-bottom:8px}.admin-pedido-card .badge{background:#fff0d5;color:#8b510c}
 .chat-layout{display:grid;grid-template-columns:minmax(130px,220px) minmax(0,1fr);gap:12px;margin-top:12px;min-height:220px}.chat-contactos{display:flex;flex-direction:column;gap:7px}.chat-contacto{text-align:left;padding:10px;background:#f4e7cf;color:#51300e;font-size:13px;border:1px solid #eadcc8}.chat-contacto:hover{background:#ead7b8}.chat-panel{border:1px solid #eadcc8;border-radius:10px;background:#fff;padding:12px;min-width:0}.chat-mensajes{height:180px;overflow-y:auto;padding:8px 2px;display:flex;flex-direction:column;gap:8px}.chat-burbuja{max-width:85%;padding:9px 11px;border-radius:10px;font-size:13px;overflow-wrap:anywhere}.chat-burbuja p{margin:4px 0}.chat-burbuja small{font-size:10px;color:#776b5b}.chat-burbuja.propia{align-self:flex-end;background:#fce9b9}.chat-burbuja.ajeno{align-self:flex-start;background:#f0eee9}.chat-form{display:flex;gap:8px;margin-top:8px}.chat-form .btn{width:auto;white-space:nowrap;margin:0;padding:9px 14px;font-size:13px}
 @media(max-width:760px){.form-inline{grid-template-columns:1fr}.chat-layout{grid-template-columns:1fr}.chat-contactos{max-height:130px;overflow:auto}.registro-abastecimiento{align-items:flex-start;flex-direction:column}}
+
+
+/* Navegación del panel de administración */
+#cardAdmin{max-width:1180px;margin:18px auto}
+#cardAdmin .admin-body{padding:18px}
+.admin-topbar{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:0 0 16px;border-bottom:1px solid #eadcc8;margin-bottom:18px}
+.admin-topbar strong{font-size:17px;color:#51300e}.admin-topbar p{font-size:13px;color:#796b58;margin-top:3px}
+.admin-logout{width:auto;margin:0;padding:9px 16px;white-space:nowrap}
+.admin-layout{display:grid;grid-template-columns:225px minmax(0,1fr);gap:22px;align-items:start;min-height:500px}
+.admin-sidebar{display:flex;flex-direction:column;gap:7px;background:#fff;border:1px solid #eadcc8;border-radius:13px;padding:10px;position:sticky;top:16px}
+.admin-nav-btn{display:flex;align-items:center;gap:10px;text-align:left;padding:12px 11px;background:transparent;color:#62431f;font-size:14px;font-weight:650;border-radius:9px}
+.admin-nav-btn span{font-size:17px}.admin-nav-btn:hover{background:#fbf1dc}.admin-nav-btn.active{background:#5a3814;color:#fff}
+.admin-nav-btn small{margin-left:auto;background:#f5d98e;color:#57360e;padding:2px 7px;border-radius:20px;font-size:11px}
+.admin-content{min-width:0}.admin-page{display:none}.admin-page.active{display:block}.admin-page[hidden]{display:none!important}
+.admin-page-heading{margin:3px 0 20px}.admin-page-heading h2{color:#633c13;font-size:22px;margin-bottom:5px}.admin-page-heading p{color:#81715c;font-size:13px}
+.admin-summary-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.admin-summary-card{background:#fff;border:1px solid #eadcc8;border-radius:12px;padding:17px;display:grid;grid-template-columns:auto 1fr;column-gap:12px;align-items:center}
+.admin-summary-card span{grid-row:span 2;font-size:25px}.admin-summary-card strong{font-size:25px;color:#71450f}.admin-summary-card small{font-size:12px;color:#7d6b55}
+.admin-shortcuts{margin-top:24px;background:#fff;border:1px solid #eadcc8;border-radius:12px;padding:16px;display:flex;flex-wrap:wrap;gap:9px}.admin-shortcuts h3{width:100%;color:#5b3915;font-size:15px}.admin-shortcuts button{background:#f4e7cf;color:#583713;padding:10px 12px;font-size:12px}
+.admin-content .admin-modulo{margin-top:0}.admin-content .tabs{margin-bottom:14px}
+@media(max-width:760px){#cardAdmin{width:100%;margin:0;border-radius:0}.admin-layout{grid-template-columns:1fr;gap:15px}.admin-sidebar{position:static;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.admin-nav-btn{font-size:12px;padding:10px 8px}.admin-topbar{align-items:flex-start}.admin-summary-grid{grid-template-columns:1fr 1fr}.admin-summary-card{padding:12px}.admin-summary-card strong{font-size:21px}.admin-shortcuts{flex-direction:column}.admin-shortcuts button{text-align:left}}
+@media(max-width:420px){.admin-sidebar{grid-template-columns:1fr 1fr}.admin-nav-btn{font-size:11px;gap:6px}.admin-summary-grid{grid-template-columns:1fr}}
+
+
+/* Menús de navegación para todos los roles */
+.role-layout{display:grid;grid-template-columns:220px minmax(0,1fr);gap:20px;align-items:start;min-height:420px}
+.role-sidebar{display:flex;flex-direction:column;gap:7px;background:#fff;border:1px solid #eadcc8;border-radius:13px;padding:10px;position:sticky;top:16px}
+.role-nav-btn{display:flex;align-items:center;gap:10px;text-align:left;padding:12px 11px;background:transparent;color:#62431f;font-size:14px;font-weight:650;border-radius:9px}
+.role-nav-btn span{font-size:17px}.role-nav-btn:hover{background:#fbf1dc}.role-nav-btn.active{background:#5a3814;color:#fff}
+.role-content{min-width:0;background:rgba(255,255,255,.55);border:1px solid #eadcc8;border-radius:13px;padding:18px;min-height:390px}
+.role-page{display:none}.role-page.active{display:block}.role-page[hidden]{display:none!important}
+.role-page>h2{color:#713f12;margin-bottom:8px}.role-page>p{color:#777;margin-bottom:16px}
+#cardCliente .cliente-layout{grid-template-columns:minmax(0,1fr)}
+#cardCliente .carrito{max-width:560px;width:100%}
+#cardRepartidor .repartidor-resumen{margin-top:15px}
+@media(max-width:760px){.role-layout{grid-template-columns:1fr;gap:13px}.role-sidebar{position:static;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.role-nav-btn{font-size:12px;padding:10px 8px}.role-content{padding:13px;min-height:300px}}
+@media(max-width:420px){.role-sidebar{grid-template-columns:1fr 1fr}.role-nav-btn{font-size:11px;gap:6px}.role-content{padding:10px}}
+
+
+/* Indicadores porcentuales del inventario */
+.stock-porcentaje-linea{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:8px}
+.stock-porcentaje-linea .stock-numero{margin:8px 0 4px}
+.stock-porcentaje{font-size:25px;color:#713f12;font-weight:800}
+.stock-barra{height:13px;width:100%;overflow:hidden;border-radius:999px;background:#eee5d8;margin:8px 0 10px}
+.stock-barra-relleno{display:block;height:100%;border-radius:999px;transition:width .25s ease}
+.stock-barra-relleno.alto{background:#32945b}
+.stock-barra-relleno.medio{background:#e2a52e}
+.stock-barra-relleno.critico{background:#cf5145}
+.stock-detalle{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;font-size:11px;color:#76634c}
+.stock-alerta.medio{color:#8a5a00;background:#fff2cc}

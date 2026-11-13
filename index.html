@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -136,95 +137,94 @@
       <p>Aprueba o rechaza las solicitudes de cuenta</p>
     </header>
 
-    <div class="body">
-
-      <div class="top">
-
-        <div class="tabs" id="tabs">
-          <button type="button" data-f="pendiente" class="on">
-            Pendientes
-          </button>
-
-          <button type="button" data-f="aprobada">
-            Aprobadas
-          </button>
-
-          <button type="button" data-f="rechazada">
-            Rechazadas
-          </button>
-
-          <button type="button" data-f="todas">
-            Todas
-          </button>
+    <div class="body admin-body">
+      <div class="admin-topbar">
+        <div>
+          <strong>Panel de control</strong>
+          <p>Administra las operaciones de Cerveza ya desde un solo lugar.</p>
         </div>
-
-        <button class="btn"
-          style="width:auto;margin:0;padding:8px 16px"
-          id="btnSalir2" type="button">
-          Cerrar sesión
-        </button>
-
+        <button class="btn admin-logout" id="btnSalir2" type="button">Cerrar sesión</button>
       </div>
 
-      <div class="tablewrap">
+      <div class="admin-layout">
+        <nav class="admin-sidebar" aria-label="Menú del administrador">
+          <button type="button" class="admin-nav-btn active" data-admin-section="resumen"><span>📊</span> Resumen</button>
+          <button type="button" class="admin-nav-btn" data-admin-section="solicitudes"><span>👥</span> Solicitudes <small id="menuSolicitudesCount">0</small></button>
+          <button type="button" class="admin-nav-btn" data-admin-section="pedidos"><span>🧾</span> Pedidos de clientes</button>
+          <button type="button" class="admin-nav-btn" data-admin-section="inventario"><span>📦</span> Inventario</button>
+          <button type="button" class="admin-nav-btn" data-admin-section="stock"><span>📊</span> Stock</button>
+          <button type="button" class="admin-nav-btn" data-admin-section="abastecimiento"><span>📥</span> Abastecimiento</button>
+          <button type="button" class="admin-nav-btn" data-admin-section="chat"><span>💬</span> Chat con repartidores</button>
+        </nav>
 
-        <table>
-          <thead>
-            <tr>
-              <th>Nombre</th>
-              <th>Cédula</th>
-              <th>Teléfono</th>
-              <th>Rol</th>
-              <th>Estado</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
+        <main class="admin-content">
+          <section class="admin-page active" id="adminPage-resumen">
+            <div class="admin-page-heading"><h2>Resumen general</h2><p>Estado actual de las operaciones.</p></div>
+            <div class="admin-summary-grid">
+              <article class="admin-summary-card"><span>👥</span><strong id="resumenSolicitudes">0</strong><small>Solicitudes pendientes</small></article>
+              <article class="admin-summary-card"><span>📦</span><strong id="resumenPedidos">0</strong><small>Pedidos en curso</small></article>
+              <article class="admin-summary-card"><span>🍺</span><strong id="resumenStock">0</strong><small>Canastas disponibles</small></article>
+              <article class="admin-summary-card"><span>📥</span><strong id="resumenAbastecimiento">0</strong><small>Abastecimientos en curso</small></article>
+            </div>
+            <div class="admin-shortcuts">
+              <h3>Accesos rápidos</h3>
+              <button type="button" data-admin-section="solicitudes">Revisar solicitudes →</button>
+              <button type="button" data-admin-section="inventario">Consultar inventario →</button>
+              <button type="button" data-admin-section="stock">Consultar stock porcentual →</button>
+              <button type="button" data-admin-section="pedidos">Ver pedidos de clientes →</button>
+            </div>
+          </section>
 
-          <tbody id="tbody"></tbody>
-        </table>
+          <section class="admin-page" id="adminPage-solicitudes" hidden>
+            <div class="admin-page-heading"><h2>Solicitudes de cuenta</h2><p>Aprueba o rechaza las solicitudes de clientes y repartidores.</p></div>
+            <div class="tabs" id="tabs">
+              <button type="button" data-f="pendiente" class="on">Pendientes</button>
+              <button type="button" data-f="aprobada">Aprobadas</button>
+              <button type="button" data-f="rechazada">Rechazadas</button>
+              <button type="button" data-f="todas">Todas</button>
+            </div>
+            <div class="tablewrap"><table><thead><tr><th>Nombre</th><th>Cédula</th><th>Teléfono</th><th>Rol</th><th>Estado</th><th>Acciones</th></tr></thead><tbody id="tbody"></tbody></table></div>
+            <div class="msg" id="msgAdmin"></div>
+          </section>
 
-      </div>
+          <section class="admin-page" id="adminPage-pedidos" hidden>
+            <div class="admin-page-heading"><h2>Pedidos de clientes</h2><p>Consulta pedidos pendientes, en camino y entregados, con sus datos y horarios.</p></div>
+            <div id="adminPedidos"></div>
+          </section>
 
-      <div class="msg" id="msgAdmin"></div>
+          <section class="admin-page" id="adminPage-inventario" hidden>
+            <div class="admin-page-heading"><h2>Inventario de cervezas</h2><p>Consulta y ajusta las cantidades físicas disponibles de cada producto.</p></div>
+            <div id="adminInventario" class="admin-grid"></div>
+          </section>
 
-      <section class="admin-modulo">
-        <h2>📊 Inventario de cervezas</h2>
-        <p>Existencias disponibles en el negocio (canastas).</p>
-        <div id="adminInventario" class="admin-grid"></div>
-      </section>
+          <section class="admin-page" id="adminPage-stock" hidden>
+            <div class="admin-page-heading"><h2>Stock por porcentajes</h2><p>Visualiza el nivel disponible de cada producto respecto a su capacidad de referencia.</p></div>
+            <div id="adminStock" class="admin-grid"></div>
+          </section>
 
-      <section class="admin-modulo">
-        <h2>📥 Solicitar abastecimiento</h2>
-        <form id="formAbastecimiento" class="form-inline">
-          <div><label for="abProducto">Cerveza</label><select id="abProducto" required></select></div>
-          <div><label for="abCantidad">Cantidad de canastas</label><input id="abCantidad" type="number" min="1" value="1" required></div>
-          <div><label for="abProveedor">Proveedor</label><input id="abProveedor" type="text" placeholder="Nombre del proveedor" required></div>
-          <button class="btn" type="submit">Registrar pedido de inventario</button>
-        </form>
-        <div id="listaAbastecimiento"></div>
-      </section>
-
-      <section class="admin-modulo">
-        <h2>🧾 Pedidos de clientes</h2>
-        <p>Seguimiento de pedidos pendientes, en camino y entregados.</p>
-        <div id="adminPedidos"></div>
-      </section>
-
-      <section class="admin-modulo">
-        <h2>💬 Contactar repartidores</h2>
-        <div class="chat-layout">
-          <div id="listaChatsAdmin" class="chat-contactos"></div>
-          <div class="chat-panel">
-            <strong id="chatAdminTitulo">Selecciona un repartidor</strong>
-            <div id="chatAdminMensajes" class="chat-mensajes"></div>
-            <form id="formChatAdmin" class="chat-form">
-              <input id="textoChatAdmin" type="text" placeholder="Escribe un mensaje..." autocomplete="off" required>
-              <button class="btn" type="submit">Enviar</button>
+          <section class="admin-page" id="adminPage-abastecimiento" hidden>
+            <div class="admin-page-heading"><h2>Pedidos de abastecimiento</h2><p>Registra compras de cerveza para reponer el inventario y marca cuándo llegan.</p></div>
+            <form id="formAbastecimiento" class="form-inline">
+              <div><label for="abProducto">Cerveza</label><select id="abProducto" required></select></div>
+              <div><label for="abCantidad">Cantidad de canastas</label><input id="abCantidad" type="number" min="1" value="1" required></div>
+              <div><label for="abProveedor">Proveedor</label><input id="abProveedor" type="text" placeholder="Nombre del proveedor" required></div>
+              <button class="btn" type="submit">Registrar abastecimiento</button>
             </form>
-          </div>
-        </div>
-      </section>
+            <div id="listaAbastecimiento"></div>
+            <div class="msg" id="msgAbastecimiento"></div>
+          </section>
 
+          <section class="admin-page" id="adminPage-chat" hidden>
+            <div class="admin-page-heading"><h2>Chat con repartidores</h2><p>Selecciona un repartidor para conversar directamente.</p></div>
+            <div class="chat-layout">
+              <div id="listaChatsAdmin" class="chat-contactos"></div>
+              <div class="chat-panel"><strong id="chatAdminTitulo">Selecciona un repartidor</strong><div id="chatAdminMensajes" class="chat-mensajes"></div>
+                <form id="formChatAdmin" class="chat-form"><input id="textoChatAdmin" type="text" placeholder="Escribe un mensaje..." autocomplete="off" required><button class="btn" type="submit">Enviar</button></form>
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
     </div>
   </div>
 
@@ -290,56 +290,43 @@
       </button>
     </div>
 
-    <div class="repartidor-resumen">
-      <div class="resumen-card">
-        <span>📦</span>
-        <h3 id="contadorPendientes">0</h3>
-        <p>Pendientes</p>
-      </div>
-      <div class="resumen-card">
-        <span>🛵</span>
-        <h3 id="contadorCamino">0</h3>
-        <p>En camino</p>
-      </div>
-      <div class="resumen-card">
-        <span>✅</span>
-        <h3 id="contadorEntregados">0</h3>
-        <p>Entregados</p>
-      </div>
+    <div class="role-layout">
+      <nav class="role-sidebar" aria-label="Menú del repartidor">
+        <button type="button" class="role-nav-btn active" data-repartidor-section="resumen"><span>📊</span> Resumen</button>
+        <button type="button" class="role-nav-btn" data-repartidor-section="pendientes"><span>📦</span> Pedidos pendientes</button>
+        <button type="button" class="role-nav-btn" data-repartidor-section="camino"><span>🛵</span> En camino</button>
+        <button type="button" class="role-nav-btn" data-repartidor-section="entregados"><span>✅</span> Entregas realizadas</button>
+        <button type="button" class="role-nav-btn" data-repartidor-section="chat"><span>💬</span> Chat</button>
+      </nav>
+      <main class="role-content">
+        <section class="role-page active" id="repartidorPage-resumen">
+          <div class="admin-page-heading"><h2>Resumen de entregas</h2><p>Consulta el estado de tus pedidos.</p></div>
+          <div class="repartidor-resumen">
+            <div class="resumen-card"><span>📦</span><h3 id="contadorPendientes">0</h3><p>Pendientes</p></div>
+            <div class="resumen-card"><span>🛵</span><h3 id="contadorCamino">0</h3><p>En camino</p></div>
+            <div class="resumen-card"><span>✅</span><h3 id="contadorEntregados">0</h3><p>Entregados</p></div>
+          </div>
+        </section>
+        <section class="role-page" id="repartidorPage-pendientes" hidden>
+          <h2>📦 Pedidos pendientes</h2><p>Aquí aparecen los pedidos que esperan ser aceptados.</p><div id="pedidosRepartidor"></div>
+        </section>
+        <section class="role-page" id="repartidorPage-camino" hidden>
+          <h2>🛵 Pedidos en camino</h2><p>Pedidos que aceptaste y que todavía debes entregar.</p><div id="pedidosEnCamino"></div>
+        </section>
+        <section class="role-page" id="repartidorPage-entregados" hidden>
+          <h2>✅ Entregas realizadas</h2><p>Historial de pedidos cuya entrega ya fue confirmada.</p><div id="entregasRealizadas"></div>
+        </section>
+        <section class="role-page" id="repartidorPage-chat" hidden>
+          <h2>💬 Chat con clientes y administrador</h2>
+          <div class="chat-layout">
+            <div id="listaChatsRepartidor" class="chat-contactos"></div>
+            <div class="chat-panel"><strong id="chatRepartidorTitulo">Selecciona un pedido</strong><div id="chatRepartidorMensajes" class="chat-mensajes"></div>
+              <form id="formChatRepartidor" class="chat-form"><input id="textoChatRepartidor" type="text" placeholder="Escribe un mensaje..." autocomplete="off" required><button class="btn" type="submit">Enviar</button></form>
+            </div>
+          </div>
+        </section>
+      </main>
     </div>
-
-    <section class="repartidor-seccion">
-      <h2>📦 Pedidos pendientes</h2>
-      <p>Aquí aparecen los pedidos que esperan ser aceptados por un repartidor.</p>
-      <div id="pedidosRepartidor"></div>
-    </section>
-
-    <section class="repartidor-seccion">
-      <h2>🛵 Pedidos en camino</h2>
-      <p>Pedidos que aceptaste y que todavía debes entregar.</p>
-      <div id="pedidosEnCamino"></div>
-    </section>
-
-    <section class="repartidor-seccion">
-      <h2>✅ Entregas realizadas</h2>
-      <p>Historial de pedidos cuya entrega ya fue confirmada.</p>
-      <div id="entregasRealizadas"></div>
-    </section>
-
-    <section class="repartidor-seccion">
-      <h2>💬 Chat con clientes y administrador</h2>
-      <div class="chat-layout">
-        <div id="listaChatsRepartidor" class="chat-contactos"></div>
-        <div class="chat-panel">
-          <strong id="chatRepartidorTitulo">Selecciona un pedido</strong>
-          <div id="chatRepartidorMensajes" class="chat-mensajes"></div>
-          <form id="formChatRepartidor" class="chat-form">
-            <input id="textoChatRepartidor" type="text" placeholder="Escribe un mensaje..." autocomplete="off" required>
-            <button class="btn" type="submit">Enviar</button>
-          </form>
-        </div>
-      </div>
-    </section>
 
     <p id="msgRepartidor" class="msg"></p>
   </div>
@@ -371,92 +358,48 @@
       </div>
 
 
-      <div class="cliente-layout">
-
-        <!-- CATÁLOGO -->
-        <section class="catalogo">
-
-          <div class="seccion-titulo">
-            <h2>🍻 Nuestro catálogo</h2>
-            <span>Productos disponibles</span>
-          </div>
-
-          <div id="catalogoProductos" class="productos-grid"></div>
-
-        </section>
-
-
-        <!-- CARRITO -->
-        <aside class="carrito">
-
-          <h2>🛒 Mi carrito</h2>
-
-          <div id="carritoProductos">
-            <p class="carrito-vacio">
-              Tu carrito está vacío.
-            </p>
-          </div>
-
-          <div class="carrito-resumen">
-
-            <div>
-              <span>Subtotal</span>
-              <strong id="carritoSubtotal">$0</strong>
+      <div class="role-layout">
+        <nav class="role-sidebar" aria-label="Menú del cliente">
+          <button type="button" class="role-nav-btn active" data-cliente-section="catalogo"><span>🍻</span> Catálogo</button>
+          <button type="button" class="role-nav-btn" data-cliente-section="carrito"><span>🛒</span> Mi carrito</button>
+          <button type="button" class="role-nav-btn" data-cliente-section="pedidos"><span>📦</span> Mis pedidos</button>
+          <button type="button" class="role-nav-btn" data-cliente-section="chat"><span>💬</span> Chat con repartidor</button>
+        </nav>
+        <main class="role-content">
+          <section class="role-page active" id="clientePage-catalogo">
+            <div class="seccion-titulo"><h2>🍻 Nuestro catálogo</h2><span>Productos disponibles</span></div>
+            <div id="catalogoProductos" class="productos-grid"></div>
+          </section>
+          <section class="role-page" id="clientePage-carrito" hidden>
+            <div class="cliente-layout">
+              <aside class="carrito">
+                <h2>🛒 Mi carrito</h2>
+                <div id="carritoProductos"><p class="carrito-vacio">Tu carrito está vacío.</p></div>
+                <div class="carrito-resumen">
+                  <div><span>Subtotal</span><strong id="carritoSubtotal">$0</strong></div>
+                  <div><span>Domicilio</span><strong id="carritoDomicilio">$0</strong></div>
+                  <div class="total"><span>Total</span><strong id="carritoTotal">$0</strong></div>
+                  <button class="btn" id="btnConfirmarPedido" type="button">Confirmar pedido</button>
+                  <p class="carrito-ayuda" id="mensajeCarrito">Los pedidos son demostrativos.</p>
+                </div>
+              </aside>
             </div>
-
-            <div>
-              <span>Domicilio</span>
-              <strong id="carritoDomicilio">$0</strong>
+          </section>
+          <section class="role-page" id="clientePage-pedidos" hidden>
+            <div class="admin-page-heading"><h2>📦 Mis pedidos</h2><p>Consulta el estado y el historial de tus compras.</p></div>
+            <div id="listaPedidos"><p class="carrito-vacio">Todavía no tienes pedidos.</p></div>
+          </section>
+          <section class="role-page" id="clientePage-chat" hidden>
+            <div class="admin-page-heading"><h2>💬 Contactar a mi repartidor</h2><p>Cuando un repartidor acepte tu pedido, podrás escribirle aquí.</p></div>
+            <div id="chatClientePedido" class="chat-layout">
+              <div id="listaPedidosChat" class="chat-contactos"></div>
+              <div class="chat-panel"><strong id="chatClienteTitulo">Selecciona un pedido en curso</strong><div id="chatClienteMensajes" class="chat-mensajes"></div>
+                <form id="formChatCliente" class="chat-form"><input id="textoChatCliente" type="text" placeholder="Escribe un mensaje..." autocomplete="off" required><button class="btn" type="submit">Enviar</button></form>
+              </div>
             </div>
-
-            <div class="total">
-              <span>Total</span>
-              <strong id="carritoTotal">$0</strong>
-            </div>
-
-            <button class="btn"
-              id="btnConfirmarPedido" type="button">
-              Confirmar pedido
-            </button>
-
-            <p class="carrito-ayuda" id="mensajeCarrito">
-              Los pedidos son demostrativos.
-            </p>
-
-          </div>
-
-        </aside>
-
+          </section>
+        </main>
       </div>
-
-      <section class="historial">
-
-        <h2>📦 Mis pedidos</h2>
-
-        <div id="listaPedidos">
-          <p class="carrito-vacio">
-            Todavía no tienes pedidos.
-          </p>
-        </div>
-
-      </section>
-
-      <section class="historial" id="seccionChatCliente">
-        <h2>💬 Contactar a mi repartidor</h2>
-        <p>Cuando un repartidor acepte tu pedido, podrás escribirle aquí.</p>
-        <div id="chatClientePedido" class="chat-layout">
-          <div id="listaPedidosChat" class="chat-contactos"></div>
-          <div class="chat-panel">
-            <strong id="chatClienteTitulo">Selecciona un pedido en curso</strong>
-            <div id="chatClienteMensajes" class="chat-mensajes"></div>
-            <form id="formChatCliente" class="chat-form">
-              <input id="textoChatCliente" type="text" placeholder="Escribe un mensaje..." autocomplete="off" required>
-              <button class="btn" type="submit">Enviar</button>
-            </form>
-          </div>
-        </div>
-      </section>
-
     </div>
   </div>
 
@@ -464,3 +407,4 @@
 
 </body>
 </html>
+

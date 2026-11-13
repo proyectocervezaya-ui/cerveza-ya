@@ -130,6 +130,8 @@ const KEY_STOCK = "cerveza_stock";
 const KEY_ABASTECIMIENTO = "cerveza_abastecimiento";
 const KEY_CHATS = "cerveza_chats";
 const STOCK_INICIAL = { 1: 20, 2: 18, 3: 15, 4: 12 };
+// Capacidad de referencia para expresar el inventario como porcentaje.
+const STOCK_CAPACIDAD = { 1: 30, 2: 30, 3: 30, 4: 30 };
 let repartidorChatSeleccionado = null;
 let pedidoChatClienteSeleccionado = null;
 
@@ -338,7 +340,6 @@ $("#formLogin").addEventListener("submit", async evento => {
    BIENVENIDA Y REDIRECCIÓN POR ROL
 ========================================= */
 
-
 function openWelcome(usuario) {
 
   if (usuario.rol === "cliente") {
@@ -427,6 +428,7 @@ function openCliente(usuario) {
   renderCarrito();
   renderPedidos();
   renderChatCliente();
+  mostrarSeccionCliente("catalogo");
 }
 
 /* Mostrar catálogo */
@@ -748,9 +750,41 @@ function openAdmin() {
 
   renderTabla();
   renderInventarioAdmin();
+  renderStockAdmin();
   renderAbastecimientosAdmin();
   renderPedidosAdmin();
   renderContactosAdmin();
+  actualizarResumenAdmin();
+  mostrarSeccionAdmin("resumen");
+}
+
+/* Menú de navegación del administrador */
+function mostrarSeccionAdmin(seccion) {
+  document.querySelectorAll(".admin-page").forEach(pagina => {
+    const activa = pagina.id === "adminPage-" + seccion;
+    pagina.hidden = !activa;
+    pagina.classList.toggle("active", activa);
+  });
+  document.querySelectorAll(".admin-nav-btn").forEach(boton => {
+    boton.classList.toggle("active", boton.dataset.adminSection === seccion);
+  });
+}
+
+document.querySelectorAll("[data-admin-section]").forEach(boton => {
+  boton.addEventListener("click", () => mostrarSeccionAdmin(boton.dataset.adminSection));
+});
+
+function actualizarResumenAdmin() {
+  const pendientes = getUsers().filter(u => u.estado === "pendiente").length;
+  const pedidosEnCurso = obtenerTodosLosPedidos().filter(p => ["Pendiente", "Listo para entrega", "En camino"].includes(p.estado)).length;
+  const stock = obtenerStock();
+  const totalStock = Object.values(stock).reduce((s, n) => s + (Number(n) || 0), 0);
+  const abastecimientos = obtenerAbastecimientos().filter(a => a.estado === "En curso").length;
+  if ($("#resumenSolicitudes")) $("#resumenSolicitudes").textContent = pendientes;
+  if ($("#resumenPedidos")) $("#resumenPedidos").textContent = pedidosEnCurso;
+  if ($("#resumenStock")) $("#resumenStock").textContent = totalStock;
+  if ($("#resumenAbastecimiento")) $("#resumenAbastecimiento").textContent = abastecimientos;
+  if ($("#menuSolicitudesCount")) $("#menuSolicitudesCount").textContent = pendientes;
 }
 
 /* Mostrar usuarios */
@@ -868,6 +902,7 @@ function cambiar(cedula, estado) {
   setUsers(usuarios);
 
   renderTabla();
+  actualizarResumenAdmin();
 
   note(
     "#msgAdmin",
@@ -888,6 +923,7 @@ function eliminar(cedula) {
   );
 
   renderTabla();
+  actualizarResumenAdmin();
 
   note(
     "#msgAdmin",
@@ -929,6 +965,7 @@ function openRepartidor(usuario) {
   renderPedidosRepartidor();
   renderContactosAdmin();
   renderChatsRepartidor();
+  mostrarSeccionRepartidor("resumen");
 }
 
 /*
@@ -1141,17 +1178,31 @@ function renderInventarioAdmin() {
   const cont = $("#adminInventario"); if (!cont) return;
   const stock = obtenerStock(); cont.innerHTML = "";
   PRODUCTOS.forEach(p => {
-    const cantidad = Number(stock[p.id] || 0);
+    const cantidad = Math.max(0, Number(stock[p.id]) || 0);
     const card = document.createElement("article"); card.className = "stock-admin-card";
-    card.innerHTML = `<h3>${p.emoji} ${escaparHTML(p.nombre)}</h3><p>${escaparHTML(p.presentacion)}</p><strong class="stock-numero">${cantidad} canastas</strong><span class="stock-alerta ${cantidad <= 5 ? "bajo" : ""}">${cantidad <= 5 ? "Stock bajo" : "Stock disponible"}</span><div class="stock-ajuste"><button type="button" data-stock-menos="${p.id}">−</button><button type="button" data-stock-mas="${p.id}">+</button></div>`;
+    card.innerHTML = `<h3>${p.emoji} ${escaparHTML(p.nombre)}</h3><p>${escaparHTML(p.presentacion)}</p><div class="stock-porcentaje-linea"><strong class="stock-numero">${cantidad} canastas disponibles</strong></div><div class="stock-ajuste"><button type="button" data-stock-menos="${p.id}" aria-label="Disminuir inventario de ${escaparHTML(p.nombre)}">−</button><button type="button" data-stock-mas="${p.id}" aria-label="Aumentar inventario de ${escaparHTML(p.nombre)}">+</button></div>`;
     cont.appendChild(card);
   });
   cont.querySelectorAll("[data-stock-mas]").forEach(b => b.onclick = () => ajustarStock(Number(b.dataset.stockMas), 1));
   cont.querySelectorAll("[data-stock-menos]").forEach(b => b.onclick = () => ajustarStock(Number(b.dataset.stockMenos), -1));
 }
+function renderStockAdmin() {
+  const cont = $("#adminStock"); if (!cont) return;
+  const stock = obtenerStock(); cont.innerHTML = "";
+  PRODUCTOS.forEach(p => {
+    const cantidad = Math.max(0, Number(stock[p.id]) || 0);
+    const capacidad = Math.max(1, Number(STOCK_CAPACIDAD[p.id]) || 30);
+    const porcentaje = Math.min(100, Math.round((cantidad / capacidad) * 100));
+    const nivel = porcentaje <= 25 ? "critico" : porcentaje <= 50 ? "medio" : "alto";
+    const estado = porcentaje <= 25 ? "Stock crítico" : porcentaje <= 50 ? "Stock moderado" : "Stock suficiente";
+    const card = document.createElement("article"); card.className = "stock-admin-card";
+    card.innerHTML = `<h3>${p.emoji} ${escaparHTML(p.nombre)}</h3><p>${escaparHTML(p.presentacion)}</p><div class="stock-porcentaje-linea"><strong class="stock-numero">${cantidad} canastas</strong><strong class="stock-porcentaje">${porcentaje}%</strong></div><div class="stock-barra" role="progressbar" aria-label="Stock de ${escaparHTML(p.nombre)}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${porcentaje}"><span class="stock-barra-relleno ${nivel}" style="width:${porcentaje}%"></span></div><div class="stock-detalle"><span>Capacidad: ${capacidad} canastas</span><span class="stock-alerta ${nivel === "critico" ? "bajo" : nivel === "medio" ? "medio" : ""}">${estado}</span></div>`;
+    cont.appendChild(card);
+  });
+}
 function ajustarStock(id, delta) {
   const stock = obtenerStock(); stock[id] = Math.max(0, Number(stock[id] || 0) + delta); guardarStock(stock);
-  renderInventarioAdmin(); renderCatalogo();
+  renderInventarioAdmin(); renderStockAdmin(); renderCatalogo();
 }
 function renderAbastecimientosAdmin() {
   const select = $("#abProducto"), cont = $("#listaAbastecimiento"); if (!select || !cont) return;
@@ -1165,17 +1216,19 @@ $("#formAbastecimiento")?.addEventListener("submit", e => {
   if (!producto || cantidad < 1 || !proveedor) return;
   const lista = obtenerAbastecimientos(); lista.push({ id: "INV-" + Date.now(), productoId: producto.id, producto: producto.nombre, cantidad, proveedor, fecha: horaActual(), estado: "En curso" });
   localStorage.setItem(KEY_ABASTECIMIENTO, JSON.stringify(lista)); e.target.reset(); renderAbastecimientosAdmin();
-  note("#msgAdmin", "Pedido de abastecimiento registrado. El stock aumentará cuando marques que fue recibido.", "ok");
+  actualizarResumenAdmin();
+  note("#msgAbastecimiento", "Pedido de abastecimiento registrado. El stock aumentará cuando marques que fue recibido.", "ok");
 });
 function recibirAbastecimiento(id) {
   const lista = obtenerAbastecimientos(); const item = lista.find(x => x.id === id); if (!item || item.estado === "Recibido") return;
   item.estado = "Recibido"; item.fechaRecepcion = horaActual(); const stock = obtenerStock(); stock[item.productoId] = Number(stock[item.productoId] || 0) + Number(item.cantidad); guardarStock(stock); localStorage.setItem(KEY_ABASTECIMIENTO, JSON.stringify(lista));
-  renderInventarioAdmin(); renderAbastecimientosAdmin(); renderCatalogo(); note("#msgAdmin", "Abastecimiento recibido y stock actualizado.", "ok");
+  renderInventarioAdmin(); renderStockAdmin(); renderAbastecimientosAdmin(); renderCatalogo(); actualizarResumenAdmin(); note("#msgAbastecimiento", "Abastecimiento recibido y stock actualizado.", "ok");
 }
 function renderPedidosAdmin() {
   const cont = $("#adminPedidos"); if (!cont) return; const pedidos = obtenerTodosLosPedidos().slice().reverse(); cont.innerHTML = "";
   if (!pedidos.length) { cont.innerHTML = '<p class="carrito-vacio">Aún no hay pedidos de clientes.</p>'; return; }
   pedidos.forEach(p => { const div = document.createElement("article"); div.className = "admin-pedido-card"; const detalle = (p.productos || []).map(x => `${escaparHTML(x.nombre)} × ${Number(x.cantidad) || 0}`).join(", "); div.innerHTML = `<div class="admin-pedido-cabecera"><strong>${escaparHTML(p.id)}</strong><span class="badge">${escaparHTML(p.estado)}</span></div><p><strong>Cliente:</strong> ${escaparHTML(p.nombre || "Sin nombre")} · CC ${escaparHTML(p.cliente || "-")}</p><p><strong>Teléfono:</strong> ${escaparHTML(p.telefono || "No registrado")}</p><p><strong>Fecha y hora:</strong> ${escaparHTML(p.fecha || "-")} ${escaparHTML(p.hora || "")}</p><p><strong>Productos:</strong> ${detalle || "Sin detalle"}</p><p><strong>Total:</strong> ${dinero(Number(p.total) || 0)}</p><p><strong>Repartidor:</strong> ${escaparHTML(p.repartidor || "Aún sin asignar")}</p>`; cont.appendChild(div); });
+  actualizarResumenAdmin();
 }
 
 /* =========================================
@@ -1216,10 +1269,37 @@ function renderChatCliente() {
 }
 $("#formChatCliente")?.addEventListener("submit", e => { e.preventDefault(); const pedido = e.currentTarget.dataset.pedido; const texto = $("#textoChatCliente").value.trim(); if (!pedido || !texto) return; agregarMensaje(pedido, "cliente", clienteActual?.nombre || "Cliente", texto); $("#textoChatCliente").value = ""; pintarMensajes(pedido, $("#chatClienteMensajes"), "cliente"); });
 
+/* Menús de navegación para cliente y repartidor */
+function mostrarSeccionCliente(seccion) {
+  document.querySelectorAll("#cardCliente .role-page").forEach(pagina => {
+    const activa = pagina.id === "clientePage-" + seccion;
+    pagina.hidden = !activa;
+    pagina.classList.toggle("active", activa);
+  });
+  document.querySelectorAll("#cardCliente [data-cliente-section]").forEach(boton => {
+    boton.classList.toggle("active", boton.dataset.clienteSection === seccion);
+  });
+}
+function mostrarSeccionRepartidor(seccion) {
+  document.querySelectorAll("#cardRepartidor .role-page").forEach(pagina => {
+    const activa = pagina.id === "repartidorPage-" + seccion;
+    pagina.hidden = !activa;
+    pagina.classList.toggle("active", activa);
+  });
+  document.querySelectorAll("#cardRepartidor [data-repartidor-section]").forEach(boton => {
+    boton.classList.toggle("active", boton.dataset.repartidorSection === seccion);
+  });
+}
+document.querySelectorAll("#cardCliente [data-cliente-section]").forEach(boton => {
+  boton.addEventListener("click", () => mostrarSeccionCliente(boton.dataset.clienteSection));
+});
+document.querySelectorAll("#cardRepartidor [data-repartidor-section]").forEach(boton => {
+  boton.addEventListener("click", () => mostrarSeccionRepartidor(boton.dataset.repartidorSection));
+});
+
 /* =========================================
    CERRAR SESIÓN
 ========================================= */
-
 
 function salir() {
 
@@ -1241,7 +1321,6 @@ function salir() {
   show("vLogin");
 }
 
-
 /* Botones de cerrar sesión */
 
 $("#btnSalir1").addEventListener("click", salir);
@@ -1249,11 +1328,11 @@ $("#btnSalir2").addEventListener("click", salir);
 
 /* Actualización entre pestañas del mismo navegador (prototipo local) */
 window.addEventListener("storage", evento => {
-  if ([KEY_PEDIDOS, KEY_STOCK, KEY_ABASTECIMIENTO, KEY_CHATS].includes(evento.key)) {
+  if ([KEY_PEDIDOS, KEY_STOCK, KEY_ABASTECIMIENTO, KEY_CHATS, KEY].includes(evento.key)) {
     if (clienteActual) { renderCatalogo(); renderPedidos(); renderChatCliente(); }
     if (repartidorActual) { renderPedidosRepartidor(); renderChatsRepartidor(); }
     if (sessionStorage.getItem("sesion") === "admin") {
-      renderInventarioAdmin(); renderAbastecimientosAdmin(); renderPedidosAdmin(); renderContactosAdmin();
+      renderInventarioAdmin(); renderStockAdmin(); renderAbastecimientosAdmin(); renderPedidosAdmin(); renderContactosAdmin(); actualizarResumenAdmin();
     }
   }
 });
@@ -1284,3 +1363,4 @@ window.addEventListener("storage", evento => {
     }
   }
 })();
+
